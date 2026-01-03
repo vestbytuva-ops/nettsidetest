@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DevSide Login</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Arial', sans-serif;
+      background-color: #111;
+      color: #fff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    /* Login form */
+    .login-container {
+      background-color: #fff;
+      color: #111;
+      padding: 40px 50px;
+      border-radius: 15px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.5);
+      text-align: center;
+      width: 300px;
+    }
+
+    .login-container h2 {
+      margin-bottom: 20px;
+    }
+
+    .login-container input[type="password"] {
+      width: 100%;
+      padding: 12px;
+      margin: 10px 0;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      font-size: 16px;
+    }
+
+    .login-container button {
+      width: 100%;
+      padding: 12px;
+      background-color: #111;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: background 0.3s;
+      margin-top: 10px;
+    }
+
+    .login-container button:hover {
+      background-color: #333;
+    }
+
+    .error {
+      color: red;
+      font-size: 14px;
+      margin-top: 5px;
+    }
+
+    /* Welcome popup */
+    #welcome {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: #111;
+      color: #fff;
+      padding: 30px 50px;
+      border-radius: 15px;
+      box-shadow: 0 0 30px rgba(0,0,0,0.7);
+      text-align: center;
+      display: none;
+      width: 80%;
+      max-width: 600px;
+    }
+
+    #welcome p {
+      font-family: 'Courier New', monospace;
+      font-size: 18px;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+    }
+
+    #welcome button {
+      margin-top: 20px;
+      padding: 10px 20px;
+      background: #00ff99;
+      color: #111;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: background 0.3s;
+    }
+
+    #welcome button:hover {
+      background: #00cc7a;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Login form -->
+  <div class="login-container" id="login-container">
+    <h2>Enter DevSide</h2>
+    <input type="password" id="password" placeholder="Enter password">
+    <button onclick="checkPassword()">Enter</button>
+    <div class="error" id="error"></div>
+  </div>
+
+  <!-- Welcome message -->
+  <div id="welcome">
+    <p id="encryptedText"></p>
+    <button onclick="closeWelcome()">Close</button>
+  </div>
+
+  <script>
+    const correctPassword = "Dev123"; // Change password here
+    const welcomeMessage = "Welcome to the DevSide, developers."; // Your message
+
+    function checkPassword() {
+      const input = document.getElementById('password').value;
+      const error = document.getElementById('error');
+
+      if(input === correctPassword) {
+        document.getElementById('login-container').style.display = 'none';
+        showEncryptedText(welcomeMessage);
+      } else {
+        error.textContent = "Incorrect password. Try again!";
+      }
+    }
+
+    function closeWelcome() {
+      document.getElementById('welcome').style.display = 'none';
+    }
+
+    // Function to reveal text like "EncryptedText" component
+    function showEncryptedText(text) {
+      const container = document.getElementById('encryptedText');
+      document.getElementById('welcome').style.display = 'block';
+      container.textContent = "";
+      let i = 0;
+
+      const interval = setInterval(() => {
+        container.textContent += text[i];
+        i++;
+        if(i >= text.length) clearInterval(interval);
+      }, 50); // 50ms delay per character
+    }
+  </script>
+
+</body>
+</html>

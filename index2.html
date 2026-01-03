@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ReBell UB</title>
+
+  <link rel="stylesheet" href="style.css">
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+  >
+</head>
+<body>
+
+<header>
+  <div class="logo">ReBell UB</div>
+
+  <button class="hamburger" id="hamburger">
+    <i class="fa-solid fa-bars"></i>
+  </button>
+
+  <nav id="nav">
+    <ul>
+      <li><a href="#hjem">Hjem</a></li>
+      <li><a href="#om-oss">Om oss</a></li>
+      <li><a href="#utvalg">Utvalg</a></li>
+      <li><a href="devside.html">DevSide</a></li>
+    </ul>
+  </nav>
+</header>
+
+<!-- HERO -->
+<section class="hero" id="hjem">
+  <div class="typewriter-container">
+    <div class="typewriter">
+      <span id="type-text"></span>
+      <span class="caret"></span>
+    </div>
+
+    <p class="hero-sub">
+      High-end kettle-bells laget med resirkulerte materialer.
+      Ungdomsbedrift fra Ås videregående skole ®
+    </p>
+
+    <a href="#utvalg" class="btn">Se utvalget</a>
+  </div>
+</section>
+
+<!-- 🔥 KETTLEBELL VISUAL SECTION (NEW) -->
+<section class="kettlebell-visual">
+  <canvas id="kettlebellCanvas"></canvas>
+</section>
+
+<!-- PRODUCTS -->
+<section class="products" id="utvalg">
+  <div class="section-inner">
+    <h2>Vårt utvalg</h2>
+
+    <div class="product-grid">
+      <div class="product-card">
+        <img src="https://fitnessshoppen.no/images/14TUSCL102%202-p.jpg" alt="ReBell 2kg">
+        <h3>ReBell 2kg</h3>
+        <p>Small</p>
+      </div>
+
+      <div class="product-card">
+        <img src="https://fitnessshoppen.no/images/14TUSCL102%202-p.jpg" alt="ReBell 6kg">
+        <h3>ReBell 6kg</h3>
+        <p>Medium</p>
+      </div>
+
+      <div class="product-card">
+        <img src="https://fitnessshoppen.no/images/14TUSCL106-p.jpg" alt="ReBell 10kg">
+        <h3>ReBell 10kg</h3>
+        <p>Large</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="produktvideo">
+  <h3>Produktvideo</h3>
+  <p>Hvordan blir våre ReBell kettle-bells lagd?</p>
+  <br>
+  <iframe src="https://www.youtube.com/embed/Hz1oWnLT9JA" allowfullscreen></iframe>
+</div>
+
+<section class="about" id="om-oss">
+  <h2>Om oss</h2>
+  <p>
+    Vi er to nyskjerrige studenter ved Ås videregående skole...
+  </p>
+</section>
+
+<footer>
+  <div class="socials">
+    <a href="#"><i class="fa-brands fa-youtube"></i></a>
+    <a href="#"><i class="fa-brands fa-instagram"></i></a>
+    <a href="#"><i class="fa-brands fa-tiktok"></i></a>
+    <a href="#"><i class="fa-brands fa-linkedin-in"></i></a>
+  </div>
+  <p>ReBell 2025 ©</p>
+</footer>
+
+<!-- ========================= -->
+<!-- JAVASCRIPT -->
+<!-- ========================= -->
+<script>
+/* TYPEWRITER */
+const text = "ReBell";
+const el = document.getElementById("type-text");
+let index = 0;
+(function type() {
+  if (index < text.length) {
+    el.textContent += text.charAt(index++);
+    setTimeout(type, 120);
+  }
+})();
+
+/* HAMBURGER */
+const hamburger = document.getElementById("hamburger");
+const nav = document.getElementById("nav");
+hamburger.onclick = () => nav.classList.toggle("active");
+
+/* ========================= */
+/* KETTLEBELL PHYSICS CANVAS */
+/* ========================= */
+const canvas = document.getElementById("kettlebellCanvas");
+const ctx = canvas.getContext("2d");
+
+function resizeCanvas() {
+  canvas.width = canvas.offsetWidth;
+  canvas.height = canvas.offsetHeight;
+}
+resizeCanvas();
+addEventListener("resize", resizeCanvas);
+
+const body = {
+  x: () => canvas.width / 2,
+  y: () => canvas.height / 2,
+  angle: 0,
+  angularVelocity: 0.002
+};
+
+const particles = [];
+const COUNT = 2500;
+
+function generateShape() {
+  const pts = [];
+  while (pts.length < COUNT) {
+    const x = (Math.random() * 2 - 1) * 180;
+    const y = (Math.random() * 2 - 1) * 260;
+
+    const bodyPart = (x*x + (y-60)*(y-60)) < 170*170;
+    const outer = (x*x)/(150*150) + ((y+140)*(y+140))/(80*80) < 1;
+    const inner = (x*x)/(90*90) + ((y+140)*(y+140))/(45*45) < 1;
+
+    if (bodyPart || (outer && !inner)) pts.push({x,y});
+  }
+  return pts;
+}
+
+const locals = generateShape();
+
+locals.forEach(lp => {
+  particles.push({
+    local: lp,
+    x: 0, y: 0,
+    vx: 0, vy: 0
+  });
+});
+
+function animate() {
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  body.angle += body.angularVelocity;
+
+  const cos = Math.cos(body.angle);
+  const sin = Math.sin(body.angle);
+
+  particles.forEach(p => {
+    const tx = body.x() + p.local.x * cos - p.local.y * sin;
+    const ty = body.y() + p.local.x * sin + p.local.y * cos;
+
+    if (!p.x) { p.x = tx; p.y = ty; }
+
+    p.vx += (tx - p.x) * 0.004;
+    p.vy += (ty - p.y) * 0.004;
+
+    p.vx *= 0.985;
+    p.vy *= 0.985;
+
+    p.x += p.vx;
+    p.y += p.vy;
+
+    ctx.beginPath();
+    ctx.arc(p.x, p.y, 1.2, 0, Math.PI*2);
+    ctx.fillStyle = "white";
+    ctx.fill();
+  });
+
+  requestAnimationFrame(animate);
+}
+animate();
+
+  const modal = document.getElementById("productModal");
+
+  document.querySelectorAll(".product-card").forEach(card => {
+    card.addEventListener("click", () => {
+      document.getElementById("modalImage").src =
+        card.querySelector("img").src;
+
+      document.getElementById("modalTitle").innerText =
+        card.querySelector("h3").innerText;
+
+      document.getElementById("modalDescription").innerText =
+        card.querySelector("p").innerText;
+
+      modal.classList.add("active");
+    });
+  });
+
+  document.querySelector(".close").onclick = () => {
+    modal.classList.remove("active");
+  };
+
+
+</script>
+
+</body>
+</html>
