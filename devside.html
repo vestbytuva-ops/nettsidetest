@@ -17,7 +17,7 @@
       height: 100vh;
     }
 
-    /* Login form */
+  
     .login-container {
       background-color: #fff;
       color: #111;
@@ -107,7 +107,7 @@
 </head>
 <body>
 
-  <!-- Login form -->
+
   <div class="login-container" id="login-container">
     <h2>Enter DevSide</h2>
     <input type="password" id="password" placeholder="Enter password">
@@ -122,8 +122,8 @@
   </div>
 
   <script>
-    const correctPassword = "Dev123"; // Change password here
-    const welcomeMessage = "Welcome to the DevSide, developers."; // Your message
+    const correctPassword = "Dev123"; 
+    const welcomeMessage = "Welcome to the DevSide, developers.";
 
     function checkPassword() {
       const input = document.getElementById('password').value;
@@ -141,7 +141,7 @@
       document.getElementById('welcome').style.display = 'none';
     }
 
-    // Function to reveal text like "EncryptedText" component
+
     function showEncryptedText(text) {
       const container = document.getElementById('encryptedText');
       document.getElementById('welcome').style.display = 'block';
@@ -152,7 +152,7 @@
         container.textContent += text[i];
         i++;
         if(i >= text.length) clearInterval(interval);
-      }, 50); // 50ms delay per character
+      }, 50); 
     }
   </script>
 

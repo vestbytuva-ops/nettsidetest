@@ -488,7 +488,7 @@
       </div>
     </div>
 
-    <!-- DOCUMENTS TAB -->
+    
     <div id="documentsTab" class="tab-content hidden">
       <div class="content-box">
         <h2>Dokumenter & PDFs</h2>
@@ -610,7 +610,7 @@
     if (stored) {
       return JSON.parse(stored);
     }
-    // Default products
+ 
     return [
       {
         id: 1,
@@ -684,7 +684,7 @@ ${html}
     });
   }
 
-  // Document management
+
   function handleFileUpload(event) {
     const files = event.target.files;
     const docs = getDocuments();
@@ -739,7 +739,7 @@ ${html}
     loadDocuments();
   }
 
-  // Hamburger menu (same as index.html)
+
   const hamburger = document.getElementById("hamburger");
   const nav = document.getElementById("nav");
 
